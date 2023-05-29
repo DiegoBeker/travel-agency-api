@@ -19,13 +19,6 @@ async function postHotel(body) {
             VAlUES ($1, $2)
         `, [amenity, hotelId]);
     });
-
-    pictures.forEach(async picture => {
-        await db.query(`
-            INSERT INTO hotels_pictures (url, hotel_id)
-            VAlUES ($1, $2)
-        `, [picture, hotelId]);
-    });
 }
 
 async function findHotelsByCity(city){
