@@ -18,3 +18,14 @@ export async function getHotelsByCity(req, res) {
         res.status(500).send(error.message);
     }
 }
+
+export async function getHotelById(req, res) {
+    const { id } = req.params;
+
+    try {
+        const hotel = await hotelsRepository.findHotelById(id);
+        res.send(hotel);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}

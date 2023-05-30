@@ -32,4 +32,29 @@ async function findHotelsByCity(city){
     return hotels.rows;
 }
 
-export default { postHotel, findHotelsByCity };
+async function findHotelById(id){
+    const hotel = await db.query(`
+    SELECT
+        hotels.name,
+        hotels.description,
+        hotels.price_per_day,
+        (
+            SELECT array_agg(amenities.amenity)
+            FROM hotels_amenities
+            JOIN amenities ON amenities.id = hotels_amenities.amenity_id
+            WHERE hotels_amenities.hotel_id = hotels.id
+        ) AS amenities,
+        (
+            SELECT array_agg(hotels_pictures.url)
+            FROM hotels_pictures
+            WHERE hotels_pictures.hotel_id = hotels.id
+        ) AS pictures
+    FROM
+        hotels
+    WHERE
+        hotels.id = $1;
+    `,[id]);
+    return hotel.rows[0];
+}
+
+export default { postHotel, findHotelsByCity, findHotelById };
